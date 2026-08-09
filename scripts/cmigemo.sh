@@ -27,11 +27,14 @@ function cmigemo_build ()
     local inst_dir="$2"
     local build_dir="$src_dir/build"
 
-    ensure_packages cmake perl curl gzip ${mingw_prefix}-libiconv libiconv
+    ensure_packages cmake perl curl gzip ${mingw_prefix}-iconv iconv
 
     local iconv_path=`type -p iconv 2>/dev/null`
-    if test -z "$iconv_path"; then
-        iconv_path="${MINGW_PREFIX}/bin/iconv"
+    if test -z "$iconv_path" || test ! -f "$iconv_path"; then
+        iconv_path="${MINGW_PREFIX}/bin/iconv.exe"
+    fi
+    if test ! -f "$iconv_path"; then
+        iconv_path="/usr/bin/iconv.exe"
     fi
 
     mkdir -p "$build_dir" "$inst_dir"
