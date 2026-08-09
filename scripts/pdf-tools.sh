@@ -29,7 +29,7 @@ function action3_pdf_tools ()
 {
     local pdf_tools_repo="https://github.com/vedang/pdf-tools"
     local pdf_tools_branch="master"
-    local pdf_tools_packages="${mingw_prefix}-poppler ${mingw_prefix}-glib2 ${mingw_prefix}-libpng"
+    local pdf_tools_packages="${mingw_prefix}-poppler ${mingw_prefix}-glib2 ${mingw_prefix}-libpng ${mingw_prefix}-pkgconf"
 
     local pdf_tools_source_dir="$emacs_build_git_dir/pdf-tools"
     local pdf_tools_server_dir="$pdf_tools_source_dir/server"
@@ -91,7 +91,7 @@ function pdf_tools_dependencies ()
 
 function pdf_tools_configure ()
 {
-    cd $pdf_tools_build_dir && "$pdf_tools_server_dir/configure" "--prefix=$pdf_tools_install_dir"
+    cd $pdf_tools_build_dir && PKG_CONFIG_PATH="${MINGW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}" "$pdf_tools_server_dir/configure" "--prefix=$pdf_tools_install_dir"
 }
 
 function pdf_tools_build ()
