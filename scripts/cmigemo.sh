@@ -37,9 +37,14 @@ function cmigemo_build ()
         iconv_path="/usr/bin/iconv.exe"
     fi
 
+    local cc_compiler="${MINGW_PREFIX}/bin/gcc.exe"
+    if test ! -f "$cc_compiler"; then
+        cc_compiler="${MINGW_PREFIX}/bin/clang.exe"
+    fi
+
     mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
-    cmake -B "$build_dir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" -DICONV_EXECUTABLE="$iconv_path" \
+    cmake -B "$build_dir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" -DCMAKE_C_COMPILER="$cc_compiler" -DICONV_EXECUTABLE="$iconv_path" \
         && cmake --build "$build_dir" \
         && cmake --install "$build_dir"
 
