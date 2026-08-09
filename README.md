@@ -10,7 +10,7 @@ Scripts to build a distribution of Emacs from sources, using MSYS2 and Mingw64.
 
 ### 1. フォーク元 & ソース情報
 - **フォーク元**: [kiennq/emacs-build](https://github.com/kiennq/emacs-build)
-- **ビルド対象ソース**: [emacs-mirror/emacs](https://github.com/emacs-mirror/emacs) (`master` ブランチ / Emacs 31.0.50 先端)
+- **ビルド対象ソース**: [emacs-mirror/emacs](https://github.com/emacs-mirror/emacs) (`emacs-31` ブランチ / 先端)
 
 ### 2. ビルドスケジュール
 - **自動実行頻度**: **毎週1回** (日曜日 00:00 UTC / 日本時間 09:00)
