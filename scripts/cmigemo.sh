@@ -3,7 +3,7 @@
 function action3_cmigemo ()
 {
     local cmigemo_repo="https://github.com/koron/cmigemo.git"
-    local cmigemo_branch="master"
+    local cmigemo_branch="main"
     local cmigemo_source_dir="$emacs_build_git_dir/cmigemo"
     local cmigemo_install_dir="$emacs_build_install_dir/cmigemo-$architecture"
     local cmigemo_zip_file="$emacs_build_zip_dir/cmigemo-${architecture}.zip"
