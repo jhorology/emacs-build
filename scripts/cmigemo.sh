@@ -58,5 +58,6 @@ function cmigemo_package ()
 {
     local inst_dir="$1"
     local zip_file="$2"
+    mkdir -p "$(dirname "$zip_file")"
     cd "$inst_dir" && zip -9r "$zip_file" *
 }
