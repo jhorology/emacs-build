@@ -27,16 +27,9 @@ function cmigemo_build ()
     local inst_dir="$2"
     local build_dir="$src_dir/build"
 
-    # cmake, perl, curl, gzip: needed for build/dict generation
-    # libiconv: provides /usr/bin/iconv.exe (MSYS2 package)
-    ensure_packages cmake perl curl gzip libiconv
-
-    # CMake's find_program(ICONV_EXECUTABLE iconv) searches the MinGW PATH.
-    # libiconv installs iconv.exe to /usr/bin/ which is NOT in the MinGW PATH.
-    # Copy iconv.exe into MINGW_PREFIX/bin so cmake find_program can locate it.
-    if test ! -f "${MINGW_PREFIX}/bin/iconv.exe" && test -f "/usr/bin/iconv.exe"; then
-        cp -f /usr/bin/iconv.exe "${MINGW_PREFIX}/bin/iconv.exe"
-    fi
+    # ${mingw_prefix}-libiconv installs iconv.exe to ${MINGW_PREFIX}/bin/
+    # which is in the MinGW PATH and found by cmake's find_program.
+    ensure_packages cmake perl curl gzip ${mingw_prefix}-libiconv
 
     local cc_compiler="${MINGW_PREFIX}/bin/gcc.exe"
     if test ! -f "$cc_compiler"; then
