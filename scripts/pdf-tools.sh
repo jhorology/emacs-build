@@ -59,7 +59,7 @@ function action3_pdf_tools ()
 
 function pdf_tools_ensure_packages ()
 {
-    ensure_packages `pdf_tools_dependencies`
+    ensure_packages ${mingw_prefix}-poppler ${mingw_prefix}-glib2 ${mingw_prefix}-libpng ${mingw_prefix}-pkgconf `pdf_tools_dependencies`
 }
 
 function pdf_tools_clone ()
@@ -95,7 +95,10 @@ function pdf_tools_configure ()
     if test ! -f "$cc_compiler"; then
         cc_compiler="${MINGW_PREFIX}/bin/clang.exe"
     fi
-    cd "$pdf_tools_build_dir" && "$pdf_tools_server_dir/configure" \
+    cd "$pdf_tools_build_dir" && \
+        PKG_CONFIG_PATH="${MINGW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}" \
+        PKG_CONFIG_LIBDIR="${MINGW_PREFIX}/lib/pkgconfig" \
+        "$pdf_tools_server_dir/configure" \
         "--prefix=$pdf_tools_install_dir" \
         "--host=$MINGW_CHOST" \
         "CC=$cc_compiler" \
