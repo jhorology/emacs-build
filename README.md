@@ -1,6 +1,31 @@
-# emacs-build v0.4
+# emacs-build (jhorology fork)
 
-Scripts to build a distribution of Emacs from sources, using MSYS2 and Mingw64(32)
+Scripts to build a distribution of Emacs from sources, using MSYS2 and Mingw64.
+
+---
+
+## 📌 本フォーク (jhorology/emacs-build) の仕様概要
+
+本リポジトリは [kiennq/emacs-build](https://github.com/kiennq/emacs-build)（原著: [juanjosegarciaripoll/emacs-build](https://github.com/juanjosegarciaripoll/emacs-build)）をフォークし、**最新の Emacs 31 先端ビルドを週次で自動生成**するように拡張したものです。
+
+### 1. フォーク元 & ソース情報
+- **フォーク元**: [kiennq/emacs-build](https://github.com/kiennq/emacs-build)
+- **ビルド対象ソース**: [emacs-mirror/emacs](https://github.com/emacs-mirror/emacs) (`master` ブランチ / Emacs 31.0.50 先端)
+
+### 2. ビルドスケジュール
+- **自動実行頻度**: **毎週1回** (日曜日 00:00 UTC / 日本時間 09:00)
+- **手動実行**: GitHub Actions の `workflow_dispatch` より、リポジトリ URL やブランチ名を指定して即時実行可能。
+
+### 3. オプション構成 & パッケージバリエーション
+
+GitHub Actions リリースでは以下の2種類のバリエーションを同時に生成します：
+
+| パッケージ種別 | MSYSTEM | オプション設定 | 特徴・主な機能 |
+| :--- | :--- | :--- | :--- |
+| **標準版 (安定)** | `MINGW64` | `--without-mps --pdf-tools --hunspell --mu --isync` | **日常使用推奨**。標準の安定版GC。Native compilation, Tree-sitter, Cairo/HarfBuzz, JSON, pdf-tools, hunspell, mu, isync 等をフル同梱。 |
+| **MPS試験版 (igc)** | `UCRT64` | `--variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --mu --isync` | **実験的版**。次世代メモリプールGC (igc) を有効化し、GCフリーズを低減。各種ツール同梱。 |
+
+---
 
 ## Rationale
 
