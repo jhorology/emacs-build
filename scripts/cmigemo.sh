@@ -27,14 +27,15 @@ function cmigemo_build ()
     local inst_dir="$2"
     local build_dir="$src_dir/build"
 
-    ensure_packages cmake perl curl gzip ${mingw_prefix}-iconv iconv
+    # cmake, perl, curl, gzip: needed for build/dict generation
+    # libiconv: provides /usr/bin/iconv.exe (MSYS2 package)
+    ensure_packages cmake perl curl gzip libiconv
 
-    local iconv_path=`type -p iconv 2>/dev/null`
-    if test -z "$iconv_path" || test ! -f "$iconv_path"; then
-        iconv_path="${MINGW_PREFIX}/bin/iconv.exe"
-    fi
-    if test ! -f "$iconv_path"; then
-        iconv_path="/usr/bin/iconv.exe"
+    # CMake's find_program(ICONV_EXECUTABLE iconv) searches PATH.
+    # libiconv installs iconv.exe to /usr/bin/. If MINGW_PREFIX/bin/iconv.exe
+    # doesn't exist, symlink it so find_program finds it in the MinGW prefix too.
+    if test ! -f "${MINGW_PREFIX}/bin/iconv.exe" && test -f "/usr/bin/iconv.exe"; then
+        ln -sf /usr/bin/iconv.exe "${MINGW_PREFIX}/bin/iconv.exe" 2>/dev/null || true
     fi
 
     local cc_compiler="${MINGW_PREFIX}/bin/gcc.exe"
@@ -44,7 +45,10 @@ function cmigemo_build ()
 
     mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
-    cmake -B "$build_dir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" -DCMAKE_C_COMPILER="$cc_compiler" -DICONV_EXECUTABLE="$iconv_path" \
+    cmake -B "$build_dir" -G "Unix Makefiles" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX="$inst_dir" \
+        -DCMAKE_C_COMPILER="$cc_compiler" \
         && cmake --build "$build_dir" \
         && cmake --install "$build_dir"
 
