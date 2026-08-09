@@ -62,15 +62,15 @@ jobs:
           - os: windows-2025
             shell: powershell
             msystem: MINGW64
-            build_options: --without-mps --pdf-tools --hunspell --mu --isync
+            build_options: --without-mps --pdf-tools --hunspell --mu --isync --cmigemo
           - os: windows-2025
             shell: powershell
             msystem: UCRT64
-            build_options: --variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --mu --isync
+            build_options: --variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --mu --isync --cmigemo
           - os: windows-11-arm
             shell: powershell
             msystem: CLANGARM64
-            build_options: --without-native-compilation --without-mps --pdf-tools --hunspell
+            build_options: --without-native-compilation --without-mps --pdf-tools --hunspell --cmigemo
 
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}

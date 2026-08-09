@@ -34,6 +34,7 @@
 . scripts/hunspell.sh
 . scripts/msys2_extra.sh
 . scripts/gnutls.sh
+. scripts/cmigemo.sh
 
 function write_help () {
     echo "Emacs-build tool version $emacs_build_version, (c) 2020 Juan Jose Garcia-Ripoll"
@@ -520,6 +521,7 @@ while test -n "$*"; do
         --isync) add_actions action3_isync;;
         --aspell) add_actions action3_aspell;;
         --hunspell) add_actions action3_hunspell;;
+        --cmigemo) add_actions action3_cmigemo;;
 
         --test-pdf-tools) add_actions test_epdfinfo;;
         --test-mu) add_actions test_mu;;

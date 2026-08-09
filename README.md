@@ -22,8 +22,8 @@ GitHub Actions リリースでは以下の2種類のバリエーションを同�
 
 | パッケージ種別 | MSYSTEM | オプション設定 | 特徴・主な機能 |
 | :--- | :--- | :--- | :--- |
-| **標準版 (安定)** | `MINGW64` | `--without-mps --pdf-tools --hunspell --mu --isync` | **日常使用推奨**。標準の安定版GC。Native compilation, Tree-sitter, Cairo/HarfBuzz, JSON, pdf-tools, hunspell, mu, isync 等をフル同梱。 |
-| **MPS試験版 (igc)** | `UCRT64` | `--variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --mu --isync` | **実験的版**。次世代メモリプールGC (igc) を有効化し、GCフリーズを低減。各種ツール同梱。 |
+| **標準版 (安定)** | `MINGW64` | `--without-mps --pdf-tools --hunspell --mu --isync --cmigemo` | **日常使用推奨**。標準の安定版GC。Native compilation, Tree-sitter, Cairo/HarfBuzz, JSON, pdf-tools, hunspell, mu, isync, C/Migemo 等をフル同梱。 |
+| **MPS試験版 (igc)** | `UCRT64` | `--variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --mu --isync --cmigemo` | **実験的版**。次世代メモリプールGC (igc) を有効化し、GCフリーズを低減。各種ツール同梱。 |
 
 ---
 
