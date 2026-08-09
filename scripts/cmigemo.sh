@@ -31,11 +31,11 @@ function cmigemo_build ()
     # libiconv: provides /usr/bin/iconv.exe (MSYS2 package)
     ensure_packages cmake perl curl gzip libiconv
 
-    # CMake's find_program(ICONV_EXECUTABLE iconv) searches PATH.
-    # libiconv installs iconv.exe to /usr/bin/. If MINGW_PREFIX/bin/iconv.exe
-    # doesn't exist, symlink it so find_program finds it in the MinGW prefix too.
+    # CMake's find_program(ICONV_EXECUTABLE iconv) searches the MinGW PATH.
+    # libiconv installs iconv.exe to /usr/bin/ which is NOT in the MinGW PATH.
+    # Copy iconv.exe into MINGW_PREFIX/bin so cmake find_program can locate it.
     if test ! -f "${MINGW_PREFIX}/bin/iconv.exe" && test -f "/usr/bin/iconv.exe"; then
-        ln -sf /usr/bin/iconv.exe "${MINGW_PREFIX}/bin/iconv.exe" 2>/dev/null || true
+        cp -f /usr/bin/iconv.exe "${MINGW_PREFIX}/bin/iconv.exe"
     fi
 
     local cc_compiler="${MINGW_PREFIX}/bin/gcc.exe"
