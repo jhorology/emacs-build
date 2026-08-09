@@ -82,7 +82,7 @@ function ensure_msys2_devel ()
 
 function msys2_makepkg ()
 {
-    $SHELL -c "source shell msys; makepkg $* EMACS=$emacs_install_dir/bin/emacs.exe"
+    $SHELL -c "source shell msys; export LDFLAGS=\"-no-undefined \$LDFLAGS\"; makepkg $* EMACS=$emacs_install_dir/bin/emacs.exe"
 }
 
 function msys2_extra_build_and_install_package ()
