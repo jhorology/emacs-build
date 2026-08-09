@@ -81,7 +81,10 @@ function pdf_tools_dependencies ()
     if test -z "$pdf_tools_dependencies"; then
         errcho "Inspecting required packages for PDF-TOOLS: $pdf_tools_packages"
         local pdf_tools_all_dependencies=`full_dependency_list "$pdf_tools_packages" "$pdf_tools_skip_packages" "pdf-tools"`
-        local emacs_all_dependencies=`emacs_dependencies`
+        local emacs_all_dependencies=""
+        if type emacs_dependencies >/dev/null 2>&1; then
+            emacs_all_dependencies=`emacs_dependencies`
+        fi
         pdf_tools_dependencies=`elements_not_in_list "$pdf_tools_all_dependencies" "$emacs_all_dependencies"`
         errcho Total packages required:
         errcho   `echo $pdf_tools_dependencies | sed -e 's, ,\n,g' -`
@@ -132,9 +135,12 @@ function pdf_tools_install ()
 
 function pdf_tools_package ()
 {
-    package_dependencies "$pdf_tools_zip_file" "`pdf_tools_dependencies`" \
-        && cd "$pdf_tools_install_dir" \
-        && zip -9r "$pdf_tools_zip_file" *
+    mkdir -p "$(dirname "$pdf_tools_zip_file")"
+    local deps=`pdf_tools_dependencies`
+    if test -n "$deps"; then
+        package_dependencies "$pdf_tools_zip_file" "$deps" || true
+    fi
+    cd "$pdf_tools_install_dir" && zip -9r "$pdf_tools_zip_file" *
 }
 
 
