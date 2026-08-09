@@ -91,7 +91,15 @@ function pdf_tools_dependencies ()
 
 function pdf_tools_configure ()
 {
-    cd $pdf_tools_build_dir && PKG_CONFIG_PATH="${MINGW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}" "$pdf_tools_server_dir/configure" "--prefix=$pdf_tools_install_dir"
+    local cc_compiler="${MINGW_PREFIX}/bin/gcc.exe"
+    if test ! -f "$cc_compiler"; then
+        cc_compiler="${MINGW_PREFIX}/bin/clang.exe"
+    fi
+    cd "$pdf_tools_build_dir" && "$pdf_tools_server_dir/configure" \
+        "--prefix=$pdf_tools_install_dir" \
+        "--host=$MINGW_CHOST" \
+        "CC=$cc_compiler" \
+        "PKG_CONFIG=${MINGW_PREFIX}/bin/pkg-config.exe"
 }
 
 function pdf_tools_build ()
