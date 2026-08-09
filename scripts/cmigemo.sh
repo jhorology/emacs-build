@@ -14,10 +14,9 @@ function action3_cmigemo ()
         return 0
     fi
 
-    echo "Building C/Migemo..."
+    echo "Building C/Migemo via CMake..."
     clone_repo "$cmigemo_branch" "$cmigemo_repo" "$cmigemo_source_dir" \
-        && cmigemo_build "$cmigemo_source_dir" \
-        && cmigemo_install "$cmigemo_source_dir" "$cmigemo_install_dir" \
+        && cmigemo_build "$cmigemo_source_dir" "$cmigemo_install_dir" \
         && cmigemo_package "$cmigemo_install_dir" "$cmigemo_zip_file" \
         && emacs_extensions="$cmigemo_zip_file $emacs_extensions"
 }
@@ -25,26 +24,21 @@ function action3_cmigemo ()
 function cmigemo_build ()
 {
     local src_dir="$1"
-    cd "$src_dir"
-    ./configure
-    make gcc-all || make -f compile/make_gcc.mak
-    make gcc-dict || make -f compile/make_gcc.mak dict
-}
-
-function cmigemo_install ()
-{
-    local src_dir="$1"
     local inst_dir="$2"
-    local bindir="$inst_dir/bin"
-    local dictdir="$inst_dir/share/migemo"
-    mkdir -p "$bindir" "$dictdir"
+    local build_dir="$src_dir/build"
 
-    echo "Copying C/Migemo executables and dictionaries..."
-    find "$src_dir" -name "cmigemo.exe" -exec cp -f {} "$bindir/" \;
-    find "$src_dir" -name "migemo.dll" -exec cp -f {} "$bindir/" \;
-    
-    if test -d "$src_dir/dict"; then
-        cp -rf "$src_dir/dict"/* "$dictdir/" 2>/dev/null || true
+    ensure_packages cmake perl curl
+
+    mkdir -p "$build_dir"
+    cd "$src_dir"
+    cmake -B "$build_dir" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" \
+        && cmake --build "$build_dir" \
+        && cmake --install "$build_dir"
+
+    # Also place migemo-dict directly under share/migemo for convenience
+    if test -d "$inst_dir/share/cmigemo/utf-8"; then
+        mkdir -p "$inst_dir/share/migemo"
+        cp -rf "$inst_dir/share/cmigemo/utf-8"/* "$inst_dir/share/migemo/" 2>/dev/null || true
     fi
 }
 
