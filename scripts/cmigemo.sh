@@ -27,11 +27,12 @@ function cmigemo_build ()
     local inst_dir="$2"
     local build_dir="$src_dir/build"
 
-    ensure_packages cmake perl curl gzip libiconv
+    ensure_packages cmake perl curl gzip ${mingw_prefix}-libiconv libiconv
 
+    local iconv_path=$(which iconv 2>/dev/null || echo "iconv")
     mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
-    cmake -B "$build_dir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" \
+    cmake -B "$build_dir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" -DICONV_EXECUTABLE="$iconv_path" \
         && cmake --build "$build_dir" \
         && cmake --install "$build_dir"
 
