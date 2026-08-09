@@ -27,7 +27,7 @@ function cmigemo_build ()
     local inst_dir="$2"
     local build_dir="$src_dir/build"
 
-    ensure_packages cmake perl curl
+    ensure_packages cmake perl curl gzip
 
     mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
