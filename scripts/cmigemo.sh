@@ -29,9 +29,9 @@ function cmigemo_build ()
 
     ensure_packages cmake perl curl
 
-    mkdir -p "$build_dir"
+    mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
-    cmake -B "$build_dir" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" \
+    cmake -B "$build_dir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$inst_dir" \
         && cmake --build "$build_dir" \
         && cmake --install "$build_dir"
 
