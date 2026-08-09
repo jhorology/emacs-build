@@ -98,6 +98,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - name: Cache build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./git
+            ./build
+            ./zips
+          key: emacs-build-cache-${{ runner.os }}-${{ matrix.msystem }}-${{ needs.prepare_env.outputs.commit }}
+          restore-keys: |
+            emacs-build-cache-${{ runner.os }}-${{ matrix.msystem }}-
+
       - name: Setup Msys2
         id: msys2
         uses: msys2/setup-msys2@v2
