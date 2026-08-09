@@ -66,12 +66,12 @@ jobs:
             shell: powershell
             msystem: MINGW64
             emacs_options: --without-mps
-            extension_options: --pdf-tools --hunspell --mu --isync --cmigemo
+            extension_options: --pdf-tools --hunspell --cmigemo
           - os: windows-2025
             shell: powershell
             msystem: UCRT64
             emacs_options: --variant mps --with-mps --no-strip --enable-build-details
-            extension_options: --pdf-tools --hunspell --mu --isync --cmigemo
+            extension_options: --pdf-tools --hunspell --cmigemo
           - os: windows-11-arm
             shell: powershell
             msystem: CLANGARM64
