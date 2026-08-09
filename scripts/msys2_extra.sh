@@ -82,7 +82,7 @@ function ensure_msys2_devel ()
 
 function msys2_makepkg ()
 {
-    $SHELL -c "source shell msys; export LDFLAGS=\"-no-undefined \$LDFLAGS\"; makepkg $* EMACS=$emacs_install_dir/bin/emacs.exe"
+    $SHELL -c "source shell msys; makepkg LDFLAGS=\"-no-undefined \$LDFLAGS\" $* EMACS=$emacs_install_dir/bin/emacs.exe"
 }
 
 function msys2_extra_build_and_install_package ()
@@ -97,6 +97,9 @@ function msys2_extra_build_and_install_package ()
     fi
     if test ! -f "$package_file"; then
         echo Building package $package_dir on directory $package_dir
+        if test -f "$package_dir/PKGBUILD"; then
+            grep -q "no-undefined" "$package_dir/PKGBUILD" || sed -i 's/build() {/build() {\n  export LDFLAGS="$LDFLAGS -no-undefined"/' "$package_dir/PKGBUILD"
+        fi
         (cd "$package_dir" && rm -f *.zst && msys2_makepkg --noconfirm -rsf -p PKGBUILD)
         if test "$?" != 0; then
             echo Unable to build package. Aborting.
