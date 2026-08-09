@@ -2,6 +2,9 @@
 
 name: build
 
+permissions:
+  contents: write
+
 # Controls when the action will run.
 on:
   schedule:
@@ -62,15 +65,18 @@ jobs:
           - os: windows-2025
             shell: powershell
             msystem: MINGW64
-            build_options: --without-mps --pdf-tools --hunspell --mu --isync --cmigemo
+            emacs_options: --without-mps
+            extension_options: --pdf-tools --hunspell --mu --isync --cmigemo
           - os: windows-2025
             shell: powershell
             msystem: UCRT64
-            build_options: --variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --mu --isync --cmigemo
+            emacs_options: --variant mps --with-mps --no-strip --enable-build-details
+            extension_options: --pdf-tools --hunspell --mu --isync --cmigemo
           - os: windows-11-arm
             shell: powershell
             msystem: CLANGARM64
-            build_options: --without-native-compilation --without-mps --pdf-tools --hunspell --cmigemo
+            emacs_options: --without-native-compilation --without-mps
+            extension_options: --pdf-tools --hunspell --cmigemo
 
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
@@ -109,30 +115,20 @@ jobs:
 
       - name: Install deps
         run: |
-          .\emacs-build.cmd --slim --ensure ${{ matrix.build_options }}
-        # if ("${{ matrix.build_options }}" -notmatch "--without-mps") { .github/scripts/install-libs.cmd }
+          .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --ensure ${{ matrix.emacs_options }}
 
       - name: Build Emacs
         # Require --with-* flags, else the deps will not be included properly
         run: |
-          .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --configure --build-dev ${{ matrix.build_options }}
-
-      # - name: Install winget
-      #   uses: Cyberboss/install-winget@v1
-      #   with:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Install MSIXHeroCLI
-      #  run: winget install msixhero --disable-interactivity --accept-source-agreements
-      #  continue-on-error: true
+          .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --configure --build-dev ${{ matrix.emacs_options }}
 
       - name: Package Emacs
         run: |
           $env:MSIXHeroCLI = &where.exe MSIXHeroCLI
           if ($env:MSIXHeroCLI) {
-            .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --msix --pack-all ${{ matrix.build_options }}
+            .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --msix --pack-all ${{ matrix.emacs_options }} ${{ matrix.extension_options }}
           } else {
-            .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --pack-all ${{ matrix.build_options }}
+            .\emacs-build.cmd --slim --branch $env:EMACS_COMMIT --pack-all ${{ matrix.emacs_options }} ${{ matrix.extension_options }}
           }
 
       # Upload release for each build
