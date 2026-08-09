@@ -27,9 +27,9 @@ function cmigemo_build ()
     local inst_dir="$2"
     local build_dir="$src_dir/build"
 
-    # ${mingw_prefix}-libiconv installs iconv.exe to ${MINGW_PREFIX}/bin/
-    # which is in the MinGW PATH and found by cmake's find_program.
-    ensure_packages cmake perl curl gzip ${mingw_prefix}-libiconv
+    # libiconv (MSYS2 package) provides /usr/bin/iconv.exe.
+    # ${mingw_prefix}-libiconv only provides the DLL, not the iconv.exe command.
+    ensure_packages cmake perl curl gzip libiconv
 
     local cc_compiler="${MINGW_PREFIX}/bin/gcc.exe"
     if test ! -f "$cc_compiler"; then
@@ -38,7 +38,9 @@ function cmigemo_build ()
 
     mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
-    cmake -B "$build_dir" -G "Unix Makefiles" \
+    # cmake's find_program searches PATH. iconv.exe lives in /usr/bin (MSYS2),
+    # which is not in MinGW PATH by default. Prepend /usr/bin so cmake finds it.
+    PATH="/usr/bin:$PATH" cmake -B "$build_dir" -G "Unix Makefiles" \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$inst_dir" \
         -DCMAKE_C_COMPILER="$cc_compiler" \
