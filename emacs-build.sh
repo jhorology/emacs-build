@@ -439,7 +439,7 @@ var
 "
 
 packing_slim_exclusion="
-.*share/((?!emacs)(?!icons)(?!info)(?!licenses)(?!hunspell))
+.*share/((?!emacs)(?!icons)(?!info)(?!licenses)(?!hunspell)(?!migemo)(?!cmigemo))
 .*share/emacs/.*/lisp/play
 "
 
