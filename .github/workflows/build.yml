@@ -104,7 +104,6 @@ jobs:
           path: |
             ./git
             ./build
-            ./zips
           key: emacs-build-cache-${{ runner.os }}-${{ matrix.msystem }}-${{ needs.prepare_env.outputs.commit }}
           restore-keys: |
             emacs-build-cache-${{ runner.os }}-${{ matrix.msystem }}-
