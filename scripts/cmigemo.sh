@@ -37,6 +37,7 @@ function cmigemo_build ()
         cc_compiler="${MINGW_PREFIX}/bin/clang.exe"
     fi
 
+    rm -rf "$build_dir" "$inst_dir"
     mkdir -p "$build_dir" "$inst_dir"
     cd "$src_dir"
     cmake -B "$build_dir" -G "Unix Makefiles" \
