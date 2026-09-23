@@ -40,10 +40,12 @@ jobs:
           git clone --depth 1 --branch ${{ env.EMACS_BRANCH }} ${{ env.EMACS_REPO }} .
           ts=`date +'%Y%m%d'`
           commit=`git rev-parse --short=8 HEAD`
+          full_commit=`git rev-parse HEAD`
           major_ver=`cat configure.ac | grep -Po 'AC_INIT\(.*\[\K\d+'`
           version=`echo ${major_ver}.${{ github.run_number }}.${ts}.${commit}`
 
           echo "commit=${commit}" >> $GITHUB_ENV
+          echo "full_commit=${full_commit}" >> $GITHUB_ENV
           echo "version=${version}" >> $GITHUB_ENV
           echo "pkg_version=${major_ver}.${{ github.run_number }}.0.0" >> $GITHUB_ENV
     outputs:
@@ -52,6 +54,7 @@ jobs:
       version: ${{ env.version }}
       pkg_version: ${{ env.pkg_version }}
       commit: ${{ env.commit }}
+      full_commit: ${{ env.full_commit }}
 
   build_windows:
     needs: prepare_env
@@ -153,3 +156,4 @@ jobs:
           release_name: emacs_${{ needs.prepare_env.outputs.version }}
           draft: false
           prerelease: false
+
