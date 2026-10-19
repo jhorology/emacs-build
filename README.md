@@ -18,12 +18,15 @@ Scripts to build Emacs for Windows with MSYS2/MinGW.
 
 ### 3. オプション構成 & パッケージバリエーション
 
-GitHub Actions リリースでは以下の2種類のバリエーションを同時に生成します：
+GitHub Actions リリースでは以下の3種類のバリエーションを同時に生成します：
 
 | パッケージ種別 | MSYSTEM | オプション設定 | 特徴・主な機能 |
 | :--- | :--- | :--- | :--- |
-| **標準版 (安定)** | `MINGW64` | `--without-mps --pdf-tools --hunspell --cmigemo` | **日常使用推奨**。標準の安定版GC。Native compilation, Tree-sitter, Cairo/HarfBuzz, JSON, pdf-tools, hunspell, C/Migemo 等をフル同梱。 |
+| **標準版 (安定)** | `UCRT64` | `--without-mps --pdf-tools --hunspell --cmigemo` | **日常使用推奨**。標準の安定版GC。Native compilation, Tree-sitter, Cairo/HarfBuzz, JSON, pdf-tools, hunspell, C/Migemo 等をフル同梱。 |
 | **MPS試験版 (igc)** | `UCRT64` | `--variant mps --with-mps --no-strip --enable-build-details --pdf-tools --hunspell --cmigemo` | **実験的版**。次世代メモリプールGC (igc) を有効化し、GCフリーズを低減。各種ツール同梱。 |
+| **ARM64版** | `CLANGARM64` | `--without-native-compilation --without-mps --pdf-tools --hunspell --cmigemo` | Windows ARM64 向け。Native compilation と MPS は無効。 |
+
+標準版は、MINGW64 向け Tree-sitter パッケージの提供終了に伴い UCRT64 に移行しました。
 
 ---
 

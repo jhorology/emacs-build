@@ -155,6 +155,24 @@ function full_dependency_list ()
     echo $packages
 }
 
+function pacman_install ()
+{
+    local attempt
+    local status
+    for attempt in 1 2 3; do
+        if pacman -S --needed --noconfirm --noprogressbar "$@"; then
+            return 0
+        else
+            status=$?
+        fi
+        if test "$attempt" -lt 3; then
+            echo "Package installation failed; retrying ($attempt/3)." >&2
+            sleep 5
+        fi
+    done
+    return "$status"
+}
+
 function ensure_packages ()
 {
     local packages=$@
@@ -163,7 +181,7 @@ function ensure_packages ()
         echo All packages are installed.
     else
         echo Some packages are missing. Installing them with pacman.
-        pacman -S --needed --noconfirm -q $packages
+        pacman_install $packages
     fi
 }
 

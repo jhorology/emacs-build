@@ -90,7 +90,7 @@ function ensure_mingw_build_software ()
 {
     echo Install essential packages
     local build_packages="git zip unzip base-devel ${mingw_prefix}-toolchain autoconf automake texinfo"
-    pacman --noprogressbar --noconfirm --needed -S $build_packages
+    pacman_install $build_packages
     if test "$?" != 0; then
         echo Unable to install $build_packages
         echo Giving up
