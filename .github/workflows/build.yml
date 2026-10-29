@@ -68,12 +68,6 @@ jobs:
           - os: windows-2025
             shell: powershell
             msystem: UCRT64
-            variant: standard
-            emacs_options: --without-mps
-            extension_options: --pdf-tools --hunspell --cmigemo
-          - os: windows-2025
-            shell: powershell
-            msystem: UCRT64
             emacs_options: --variant mps --with-mps --no-strip --enable-build-details
             variant: mps
             extension_options: --pdf-tools --hunspell --cmigemo
